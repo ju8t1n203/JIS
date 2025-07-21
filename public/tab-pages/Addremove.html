@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+
+      .addremove-text {
+        width: 250px;
+        height: 20px;
+        border-radius: 15px 15px 15px 15px;
+        padding: 5px;
+      }
+
+      .addremove-btn {
+        padding: 8px 16px;
+        color: #FFFFFF;
+        background-color: #005178;
+        border-radius: 15px 15px 15px 15px;
+        min-width: 150px;
+        max-width: 265px;
+      }
+
+      .addremove-btn:disabled {
+        cursor: not-allowed;
+        color: #000000;
+      }
+
+      .description-text {
+        font-family: inherit;
+        font-size: 12pt;
+        width: 250px;
+        height: 250px;
+        border-radius: 15px 15px 15px 15px;
+        padding: 0px;
+        vertical-align: top;
+        padding: 5px;
+        resize: none;
+      }
+
+      .addremove-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .adcombo{
+        width: 260px;
+        height: 30px;
+        border-radius: 15px 15px 15px 15px;
+        padding: 5px;
+        text-align: center;
+      }
+
+      #photo{
+        margin-bottom: 10px;
+      }
+        
+      .form-wrapper {
+        display: flex;
+        gap: 20px; /* Space between the forms */
+      }
+        
+      .form-left, .form-right {
+        width: 300px;
+      }
+        
+      .picture-box img {
+        width: 256px;
+        height: 256px;
+        border: 1px solid #ccc;
+        border-radius: 15px 15px 15px 15px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="form-wrapper">
+
+      <form class="form-left">
+      
+        <!-- AD Radio Buttons-->
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-family: Calibri, sans-serif; margin-bottom: 15px;">
+          <label><input type="radio" name="changeType" value="add" checked />Add</label>
+          <label><input type="radio" name="changeType" value="remove" id = "admode"/>Remove</label>
+        </div>
+          
+        <!-- Textboxes-->
+        <div class="addremove-container">
+          <input class="addremove-text" id="adbarcode" placeholder="Barcode">
+          <input class="addremove-text" id="adname" placeholder="Name">
+          <input class="addremove-text" id="adqty" placeholder="Quantity">
+          <span style="padding: 0px 100px;">Location</span>
+        </div>
+          
+        <!-- Site, Room, Area, Specifier Selectors -->
+        <div class="addremove-container">
+          <select class="adcombo" id="asite">
+            <option value="">--- Site ---</option>
+          </select>
+            
+          <select class="adcombo" id="aroom">
+            <option value="">--- Room ---</option>
+          </select>
+            
+          <select class="adcombo" id="aarea">
+            <option value="">--- Area ---</option>
+          </select>
+            
+          <select class="adcombo" id="aspecifier">
+            <option value="">--- Specifier ---</option>
+          </select>
+        </div>
+      </form>
+    
+      <form class="form-left">
+        <!--- Restock Textbox -->
+        <div id = "yyes" style = "margin-top: 40px; margin-bottom: 15px;">
+          <input class="addremove-text" id="adrestock" placeholder="Restock Amount">
+        </div>
+
+        <!--- Category Combobox -->
+        <select class="adcombo" id="adcategory" style="margin-bottom: 15px;">
+          <option value="">--- Category ---</option>
+        </select>
+        
+        <!--- Photo Label and Button -->
+        <div id="photo">
+          <span style = "font-size: 12pt;">Photo (optional)</span>
+          <button class="addremove-btn" type="button" id = "adupload">Upload</button>
+        </div>
+        
+        <!--- Description Teaxtbox and Submit Button -->
+        <div class="addremove-container">
+          <textarea class="description-text" id="addescription" placeholder="Description"></textarea>
+          <button class="addremove-btn" type="button" id="adsubmit">Submit</button>
+        </div>
+      </form>
+
+      <form class="form right" style="background-color: #aaa; "> <!--bg color for fine tuning-->
+        <!-- Picture box (could be an <img> or a file input preview) -->
+        <div class="picture-box">
+          <img src="" id="imagePreview">
+        </div>
+      
+        <!-- Read-only Preview Textbox -->
+        <textarea class="description-text" id="adpdescription" placeholder="Item Preview" style= "margin-top:15px; margin-bottom:15px;" readonly></textarea>
+      
+        <!-- Action buttons -->
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-family: Calibri, sans-serif; margin-bottom: 15px;">
+          <button type="button" class="addremove-btn" id="adadd" disabled>Add</button>
+          <button type="button" class="addremove-btn" id = "adremove" disabled>Delete</button>
+        </div>
+      </form>
+    </div>
+
+  </body>
+</html>
+ 

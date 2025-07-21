@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <title>Justin Inventory System</title>
+    <style>
+
+      body {
+        font-family: "Roboto", sans-serif;
+        font-size: 16pt;
+        font-weight: 300;
+        font-style: normal;
+        background-color: #005178;
+        background-image: url('bg.png');
+        background-size: 250px 250px;
+        background-repeat: repeat;
+      }
+
+      .tabs.main-tabs {
+        display: flex;
+        gap: 1px;
+        margin-bottom: 0px;
+      }
+
+      .tab {
+        padding: 10px 16px;
+        background: #e0e0e0;
+        border-radius: 15px 15px 0 0;
+        cursor: pointer;
+      }
+
+      .tab.active {
+        color: #FFFFFF;
+        background: #005178;
+      }
+
+      #mainContent {
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 0 15px 15px 15px;
+        min-height: 200px;
+        background-color: #fafafa;
+      }
+      
+    </style>
+  </head>
+
+  <body>
+
+    <h2>JIS</h2>
+
+    <div class="tabs main-tabs">
+      <div class="tab active" data-tab="search">Search</div>
+      <div class="tab" data-tab="consume">Consume</div>
+      <div class="tab" data-tab="restock">Restock</div>
+      <div class="tab" data-tab="addremove">Add/Remove</div>
+      <div class="tab" data-tab="edit">Edit</div>
+      <div class="tab" data-tab="picklist">Pick List</div>
+    </div>
+
+    <div id="mainContent">Loading...</div>
+
+    <script src="/js/editcombo.js"></script>
+    <script src="/js/subtabs.js"></script>
+    <script src="/js/EditLoc.js"></script>
+    <script src="/js/adcombo.js"></script>
+    <script src="/js/addata.js"></script>
+    <script src="/js/editcat.js"></script>
+    <script src="/js/edititem.js"></script>
+
+    <script>
+      //main tab logic
+      const mainTabs = document.querySelectorAll('.tabs.main-tabs .tab');
+      const mainContent = document.getElementById('mainContent');
+
+      const tabMap = {
+        search: 'search.html',
+        consume: 'consume.html',
+        restock: 'restock.html',
+        addremove: 'addremove.html',
+        edit: 'edit.html',
+        picklist: 'picklist.html'
+      };
+
+      mainTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          mainTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+
+          const page = tabMap[tab.dataset.tab];
+          loadTab(page);
+        });
+      });
+
+
+      window.addEventListener('DOMContentLoaded', () => {
+        loadTab('search.html');
+      });
+
+      function loadTab(tabPath) {
+        fetch(`tab-pages/${tabPath}`)
+        .then(res => res.text())
+        .then(html => {
+          mainContent.innerHTML = html;
+
+          //allow DOM to render
+          setTimeout(() => {
+            if (tabPath === 'edit.html') {
+              if (typeof setupComboLogic === 'function') setupComboLogic();
+              if (typeof manipulateCategory === 'function') manipulateCategory();
+              if (typeof attachEditLocListener === 'function') attachEditLocListener();
+              if (typeof setupSubTabs === 'function') setupSubTabs();
+              if (typeof setupei === 'function') setupei();
+              console.log('[loadTab] Sub-tabs initialized');
+            }
+            if (tabPath === 'addremove.html') {
+              if (typeof setupADcombo === 'function') setupADcombo();
+              if (typeof setupADdata === 'function') setupADdata();
+            }
+          }, 20);
+        })
+        .catch(err => {
+          console.error(`❌ Failed to load ${tabPath}:`, err);
+          mainContent.innerHTML = `<p style="color:red;">Could not load content. Try again.</p>`;
+        });
+      }
+    </script>
+
+  </body>
+</html>
