@@ -30,9 +30,9 @@ app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 //allows for multiple requests to be handled concurrently without creating a new connection each time
 const mysql = require('mysql2');
 const pool = mysql.createPool({
-  host: 'localhost',
+  host: '127.0.0.1',
   port: 3306,
-  user: 'root',
+  user: 'admin',
   password: 'rapidxc123',
   database: 'jis',
 });
