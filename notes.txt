@@ -1,0 +1,1 @@
+7-22 SQL is wired, problem was user permissions. Added SSH key to github to allow server pushes
