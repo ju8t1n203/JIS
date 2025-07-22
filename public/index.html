@@ -8,25 +8,32 @@
     <title>Justin Inventory System</title>
     <style>
       
-      body {
-        font-family: "Roboto", sans-serif;
-        font-size: 16pt;
-        font-weight: 300;
-        font-style: normal;
-        background-color: #005178;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 75vh; /* 75% of the viewport height */
-        background-image: url('bg.jpg');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        opacity: 0.5;
-        pointer-events: none; /* optional: makes it click-through */
-        z-index: -1; /* sends it behind other content */
-      }
+    body {
+      font-family: "Roboto", sans-serif;
+      font-size: 16pt;
+      font-weight: 300;
+      font-style: normal;
+      background-color: #999999;
+      position: relative; /* Required for ::before layering */
+      overflow: hidden;
+    }
+
+    /* Pseudo-element overlay for semi-transparent background */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url('favicon.ico');
+      background-size: 75vh 75vh;
+      background-position: center center;
+      background-repeat: no-repeat;
+      opacity: 0.5; /* 🔧 Set transparency level here */
+      z-index: -1;  /* 🪞 Push behind body content */
+      pointer-events: none; /* So it doesn’t interfere with interaction */
+    }
 
 
       .tabs.main-tabs {
