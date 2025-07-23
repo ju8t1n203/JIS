@@ -385,3 +385,22 @@ app.get('/api/category', (req, res) => {
     res.json(results);
   });
 });
+
+//searches the database for items by barcode
+app.get("/search", (req, res) => {
+  console.log("Search query received:", req.query);
+  const q = req.query.q;
+  if (!q) return res.json([]);
+
+  pool.query(
+    "SELECT * FROM item WHERE item_barcode LIKE ?",
+    [`%${q}%`],
+    (err, results) => {
+      if (err) {
+        console.error("Database query error:", err);
+        return res.status(500).json({ error: "Database error" });
+      }
+      res.json(results);
+    }
+  );
+});

@@ -85,6 +85,7 @@
     <script src="/js/addata.js"></script>
     <script src="/js/editcat.js"></script>
     <script src="/js/edititem.js"></script>
+    <script src="/js/searchdb.js"></script>
 
     <script>
       //main tab logic
@@ -123,6 +124,10 @@
 
           //allow DOM to render
           setTimeout(() => {
+            if (tabPath === 'search.html') {
+              if (typeof searchdb === 'function') searchdb();
+              console.log('[loadTab] Search DB initialized');
+            }
             if (tabPath === 'edit.html') {
               if (typeof setupComboLogic === 'function') setupComboLogic();
               if (typeof manipulateCategory === 'function') manipulateCategory();
