@@ -1,8 +1,10 @@
 function searchdb() {
   const searchBox = document.getElementById("search");
   const listbox = document.getElementById("vb-style-listbox");
+  // Get all radio buttons by name
+  const searchByRadios = document.getElementsByName("searchType");
 
-  if (!searchBox || !listbox) {
+  if (!searchBox || !listbox || searchByRadios.length === 0) {
     console.warn("[searchdb] Required DOM elements not found.");
     return;
   }
@@ -11,6 +13,15 @@ function searchdb() {
   searchBox.addEventListener("input", function () {
     clearTimeout(debounceTimer);
     const query = this.value.trim();
+
+    // Find the checked radio button
+    let column = "item_barcode"; // default
+    for (const radio of searchByRadios) {
+      if (radio.checked) {
+        column = radio.value;
+        break;
+      }
+    }
 
     debounceTimer = setTimeout(() => {
       // Always show header
@@ -21,7 +32,7 @@ function searchdb() {
       `;
 
       if (query.length > 0) {
-        fetch(`/search?q=${encodeURIComponent(query)}`)
+        fetch(`/search?column=${encodeURIComponent(column)}&q=${encodeURIComponent(query)}`)
           .then(res => res.json())
           .then(data => {
             if (Array.isArray(data) && data.length > 0) {
@@ -33,7 +44,7 @@ function searchdb() {
                   `${item.item_name || ''} | ` +
                   `${item.quantity || ''} | ` +
                   `${item.location || ''} | ` +
-                  `${item.description || ''}`;
+                  `${item.descriptio || ''}`;
                 li.dataset.id = item.item_barcode || item.item_name;
                 li.className = "vb-list-item";
                 fragment.appendChild(li);

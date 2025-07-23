@@ -388,19 +388,28 @@ app.get('/api/category', (req, res) => {
 
 //searches the database for items by barcode
 app.get("/search", (req, res) => {
-  console.log("Search query received:", req.query);
   const q = req.query.q;
+  let column = req.query.column
+
+  // Only allow certain columns to be searched
+  const allowedColumns = [
+    "item_barcode",
+    "item_name",
+    "descriptio"
+  ];
+
+  if (!allowedColumns.includes(column)) {
+    return res.status(400).json({ error: "Invalid column name" });
+  }
+
   if (!q) return res.json([]);
 
-  pool.query(
-    "SELECT * FROM item WHERE item_barcode LIKE ?",
-    [`%${q}%`],
-    (err, results) => {
-      if (err) {
-        console.error("Database query error:", err);
-        return res.status(500).json({ error: "Database error" });
-      }
-      res.json(results);
+  const sql = `SELECT * FROM item WHERE ${column} LIKE ?`;
+  pool.query(sql, [`%${q}%`], (err, results) => {
+    if (err) {
+      console.error("Database query error:", err);
+      return res.status(500).json({ error: "Database error" });
     }
-  );
+    res.json(results);
+  });
 });
