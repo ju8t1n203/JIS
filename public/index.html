@@ -18,21 +18,19 @@
       overflow: hidden;
     }
 
-    /* Pseudo-element overlay for semi-transparent background */
     body::before {
+      background-image: url('favicon.ico');
+      background-size: 256px 256px;
+      background-position: bottom 25px right 25px;
       content: "";
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-image: url('favicon.ico');
-      background-size: 75vh 75vh;
-      background-position: center center;
       background-repeat: no-repeat;
-      opacity: 0.5; /* 🔧 Set transparency level here */
-      z-index: -1;  /* 🪞 Push behind body content */
-      pointer-events: none; /* So it doesn’t interfere with interaction */
+      z-index: -1; 
+      pointer-events: none;
     }
 
 
