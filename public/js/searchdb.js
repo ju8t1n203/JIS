@@ -3,7 +3,7 @@ function getActiveSearchColumn() {
   for (const radio of radios) {
     if (radio.checked) return radio.value;
   }
-  return "item_barcode"; // default
+  return "item_barcode"; //default in case of error
 }
 
 function getActiveFilter() {
@@ -11,14 +11,14 @@ function getActiveFilter() {
   for (const radio of filterRadios) {
     if (radio.checked) return radio.value;
   }
-  return ""; // default or "all"
+  return ""; //default of "all" in case of error
 }
 
 function populateSelectOptions(selectId, type) {
   const select = document.getElementById(selectId);
   if (!select) return;
 
-  // Clear current options
+  //clear options
   select.innerHTML = "";
 
   let url = "";
@@ -36,7 +36,7 @@ function populateSelectOptions(selectId, type) {
   fetch(url)
     .then(res => res.json())
     .then(data => {
-      // For each result, add an option
+      //for each result add an option
       data.forEach(item => {
         let value = item.site_name || item.room_name || item.area_name || item.specifier_name || item.category_name;
         let option = document.createElement("option");
@@ -50,6 +50,7 @@ function populateSelectOptions(selectId, type) {
     });
 }
 
+//populates a cobox with options
 function populateSelect(select, items, valueKey, textKey, placeholder) {
   select.innerHTML = '';
   const opt = document.createElement('option');
@@ -70,7 +71,7 @@ function applyFilterAction(filter) {
   const F3 = document.getElementById("F3");
   const F4 = document.getElementById("F4");
 
-  // Helper to clear and disable a select
+  //helper to clear and disable a select
   function clearSelect(sel, placeholder) {
     if (sel) {
       sel.disabled = true;
@@ -82,10 +83,10 @@ function applyFilterAction(filter) {
     }
   }
 
-  // Always clear and disable F2-F4 initially
-  clearSelect(F2, "--- Choose Room ---");
-  clearSelect(F3, "--- Choose Area ---");
-  clearSelect(F4, "--- Choose Specifier ---");
+  //always clear and disable F2-F4 initially
+  clearSelect(F2, "--- Choose Filter ---");
+  clearSelect(F3, "--- Choose Filter ---");
+  clearSelect(F4, "--- Choose Filter ---");
 
   if (filter === "category" || filter === "none") {
     if (F1) {
@@ -95,7 +96,7 @@ function applyFilterAction(filter) {
         .then(categories => {
           populateSelect(F1, categories, 'category_name', 'category_name', '--- Choose Category ---');
         });
-      // Remove cascading logic for F1
+      //remove cascading logic for F1 as categories are single layer
       F1.onchange = null;
       F2.onchange = null;
       F3.onchange = null;
@@ -108,12 +109,12 @@ function applyFilterAction(filter) {
         .then(sites => {
           populateSelect(F1, sites, 'site_name', 'site_name', '--- Choose Site ---');
         });
-      // Enable F2-F4 for cascading
+      //enable F2-F4 for cascading location
       F2.disabled = true;
       F3.disabled = true;
       F4.disabled = true;
 
-      // Set up cascading logic
+      //set up cascading logic
       F1.onchange = function () {
         if (!F1.value) {
           clearSelect(F2, "--- Choose Room ---");
@@ -160,7 +161,7 @@ function applyFilterAction(filter) {
       };
     }
   } else {
-    // If neither, disable and clear F1
+    //if none disable all and clear F1
     clearSelect(F1, "--- Choose Filter ---");
     F1.onchange = null;
     F2.onchange = null;
@@ -187,7 +188,7 @@ function searchdb() {
     debounceTimer = setTimeout(() => {
       listbox.innerHTML = `
         <li class="vb-list-header">
-          barcode | name | quantity | location | description
+          Barcode | Name | Quantity | Location | Description
         </li>
       `;
 
@@ -222,7 +223,7 @@ function searchdb() {
     }, 200);
   });
 
-  // Listen for filter changes
+  //wait for filter changes
   const filterRadios = document.getElementsByName("filterType");
   filterRadios.forEach(radio => {
     radio.addEventListener("change", function () {
@@ -236,11 +237,12 @@ function searchdb() {
   // Show header on initial load
   listbox.innerHTML = `
     <li class="vb-list-header">
-      barcode | name | quantity | location | description
+      Barcode | Name | Quantity | Location | Description
     </li>
   `;
 
   console.log("[searchdb] Input listener initialized.");
+  setupListboxHighlighting();
 }
 
 window.setupSearchCombo = function setupSearchCombo() {
@@ -248,21 +250,20 @@ window.setupSearchCombo = function setupSearchCombo() {
   const roomBox = document.getElementById('F2');
   const areaBox = document.getElementById('F3');
   const specifierBox = document.getElementById('F4');
-  const categoryBox = document.getElementById('Fcat');
 
-  if (!siteBox || !roomBox || !areaBox || !specifierBox || !categoryBox) return;
+  if (!siteBox || !roomBox || !areaBox || !specifierBox) return;
 
-  // Populate sites
+  //populate sites
   fetch('/api/sites')
     .then(res => res.json())
     .then(sites => populateSelect(siteBox, sites, 'site_name', 'site_name', '--- Choose Filter ---'));
 
-  // Populate categories
+  //populate categories
   fetch('/api/category')
     .then(res => res.json())
     .then(categories => populateSelect(categoryBox, categories, 'category_name', 'category_name', '--- Choose Filter ---'));
 
-  // Site change: update rooms
+  //site has been changed update rooms
   siteBox.addEventListener('change', () => {
     if (!siteBox.value) {
       populateSelect(roomBox, [], 'room_name', 'room_name', '--- Choose Filter ---');
@@ -279,7 +280,7 @@ window.setupSearchCombo = function setupSearchCombo() {
       });
   });
 
-  // Room change: update areas
+  //room has been changed update areas
   roomBox.addEventListener('change', () => {
     if (!roomBox.value) {
       populateSelect(areaBox, [], 'area_name', 'area_name', '--- Choose Filter ---');
@@ -294,7 +295,7 @@ window.setupSearchCombo = function setupSearchCombo() {
       });
   });
 
-  // Area change: update specifiers
+  //area has been changed update specifiers
   areaBox.addEventListener('change', () => {
     if (!areaBox.value) {
       populateSelect(specifierBox, [], 'specifier_name', 'specifier_name', '--- Choose Filter ---');
@@ -305,3 +306,16 @@ window.setupSearchCombo = function setupSearchCombo() {
       .then(specifiers => populateSelect(specifierBox, specifiers, 'specifier_name', 'specifier_name', '--- Choose Filter ---'));
   });
 };
+
+function setupListboxHighlighting() {
+  const listbox = document.getElementById("vb-style-listbox");
+  if (!listbox) return;
+  listbox.addEventListener("click", function (e) {
+    if (e.target.tagName === "LI") {
+      Array.from(listbox.children).forEach(item => item.classList.remove("selected"));
+      e.target.classList.add("selected");
+    }
+  });
+}
+
+// Call this after your listbox is populated, or at the end of searchdb()

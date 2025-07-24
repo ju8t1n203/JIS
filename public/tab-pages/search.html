@@ -43,6 +43,11 @@
     cursor: pointer;
   }
 
+  #vb-style-listbox li.selected {
+    background-color: #005178;
+    color: #fff;
+  }
+
   #search {
   width: 250px;
   height: 20px;
@@ -115,19 +120,5 @@
         <button class="inventory-btn">Pick It</button>
       </div>
     </form>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const listbox = document.getElementById("vb-style-listbox");
-
-        listbox.addEventListener("click", function (e) {
-          if (e.target.tagName === "LI") {
-            Array.from(listbox.children).forEach(item => item.style.backgroundColor = "");
-            e.target.style.backgroundColor = "#b3d4fc";
-          }
-        });
-      });
-    </script>
-
   </body>
 </html>
