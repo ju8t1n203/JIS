@@ -183,7 +183,10 @@ function searchdb() {
     clearTimeout(debounceTimer);
     const query = this.value.trim();
     const column = getActiveSearchColumn();
-    const filter = getActiveFilter();
+    let filter = getActiveFilter();
+    if (filter === "location") {
+      filter = getLocationFilterString();
+    }
 
     debounceTimer = setTimeout(() => {
       listbox.innerHTML = `
@@ -318,4 +321,24 @@ function setupListboxHighlighting() {
   });
 }
 
-// Call this after your listbox is populated, or at the end of searchdb()
+function getLocationFilterString() {
+  const F1 = document.getElementById("F1");
+  const F2 = document.getElementById("F2");
+  const F3 = document.getElementById("F3");
+  const F4 = document.getElementById("F4");
+  const values = [F1, F2, F3, F4].map(sel => sel && sel.value ? sel.value : null).filter(Boolean);
+  return values.join(">");
+}
+
+// Always trigger a new search when F1-F4 change
+["F1", "F2", "F3", "F4"].forEach(id => {
+  const sel = document.getElementById(id);
+  if (sel) {
+    sel.addEventListener("change", function () {
+      const searchBox = document.getElementById("search");
+      if (searchBox) {
+        searchBox.dispatchEvent(new Event("input"));
+      }
+    });
+  }
+});

@@ -1,61 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-      <style>
+    <style>
 
-  .form-row {
-    display: flex;
-    gap: 0px;
-    margin-bottom: 15px;
-  }
+      .form-row {
+        display: flex;
+        gap: 0px;
+        margin-bottom: 15px;
+      }
 
-  .inventory-btn {
-    padding: 8px 16px;
-    font-family: inherit;
-    color: #FFFFFF;
-    background-color: #005178;
-    border-radius: 15px 15px 15px 15px;
-    min-width: 150px;
-  }
+      .inventory-btn {
+        padding: 8px 16px;
+        font-family: inherit;
+        color: #FFFFFF;
+        background-color: #005178;
+        border-radius: 15px 15px 15px 15px;
+        min-width: 150px;
+      }
 
-  .scombo{
-      font-family: inherit;
-      width: 200px;
-      height: 30px;
+      .scombo{
+          font-family: inherit;
+          width: 200px;
+          height: 30px;
+          border-radius: 15px 15px 15px 15px;
+          padding: 5px;
+          text-align: center;
+      }
+
+      #vb-style-listbox {
+        border: 1px solid #aaa;
+        width: 100%;
+        height: 150px;
+        border-radius: 15px 15px 15px 15px;
+        overflow-y: auto;
+        list-style-type: none;
+        padding: 0;
+        margin: 10;
+      }
+
+      #vb-style-listbox li {
+        padding: 6px;
+        cursor: pointer;
+      }
+
+      #vb-style-listbox li.selected {
+        background-color: #005178;
+        color: #fff;
+      }
+
+      #search {
+      width: 250px;
+      height: 20px;
       border-radius: 15px 15px 15px 15px;
       padding: 5px;
-      text-align: center;
-  }
+      }
 
-  #vb-style-listbox {
-    border: 1px solid #aaa;
-    width: 100%;
-    height: 150px;
-    border-radius: 15px 15px 15px 15px;
-    overflow-y: auto;
-    list-style-type: none;
-    padding: 0;
-    margin: 10;
-  }
-
-  #vb-style-listbox li {
-    padding: 6px;
-    cursor: pointer;
-  }
-
-  #vb-style-listbox li.selected {
-    background-color: #005178;
-    color: #fff;
-  }
-
-  #search {
-  width: 250px;
-  height: 20px;
-  border-radius: 15px 15px 15px 15px;
-  padding: 5px;
-  }
-
-      </style>
+    </style>
   </head>
 
   <body>
@@ -113,11 +113,11 @@
 
       <!-- Buttons go in their own block below -->
       <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-        <button class="inventory-btn">Consume</button>
-        <button class="inventory-btn">Restock</button>
-        <button class="inventory-btn">Remove</button>
-        <button class="inventory-btn">Edit</button>
-        <button class="inventory-btn">Pick It</button>
+        <button class="inventory-btn" type="button">Consume</button>
+        <button class="inventory-btn" type="button">Restock</button>
+        <button class="inventory-btn" type="button">Remove</button>
+        <button class="inventory-btn" type="button">Edit</button>
+        <button class="inventory-btn" type="button">Pick It</button>
       </div>
     </form>
   </body>
