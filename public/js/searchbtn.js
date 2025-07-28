@@ -18,7 +18,7 @@ function setupInventoryBtnListeners() {
         }
         case 'restock': {
           tabSelector = '[data-tab="restock"]';
-          barcodeFieldSelector = '#resbarcode';
+          barcodeFieldSelector = '#cbarcode';
           break;
         }
         case 'remove': {
