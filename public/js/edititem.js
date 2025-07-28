@@ -138,7 +138,7 @@ window.edit = function edit() {
                 [...eisite.options].find(o => o.text === '--- Choose Site ---')?.remove();
             });
 
-            //buffer, wait 50ms before fetching rooms
+            //buffer, wait 100ms before fetching rooms
             setTimeout(() => {  
                 fetch(`/api/rooms?site_name=${encodeURIComponent(eisite.value)}`)
                 .then(res => res.json())
