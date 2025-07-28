@@ -122,7 +122,9 @@ window.edit = function edit() {
             einame.value = item.item_name;
             eiquantity.value = item.quantity;
             eidescription.value = item.descriptio;
-            updateImagePreview(eibarcode.value);
+            setTimeout(() => {             
+                updateImagePreview(eibarcode.value);
+            }, 100);
             
             const [site, room, area, specifier] = (item.location || '').split('>');
             console.log(`location information: ${site}->${room}->${area}->${specifier}`);

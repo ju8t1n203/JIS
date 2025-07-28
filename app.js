@@ -248,7 +248,6 @@ app.get('/api/item-photo', (req, res) => {
   pool.query('SELECT photo FROM item WHERE item_barcode = ?', [barcode], (err, results) => {
     if (err || results.length === 0 || !results[0].photo) {
       //photo not found try default
-      setTimeout(() => { 
         pool.query('SELECT photo FROM item WHERE item_barcode = ?',[`12345`], (err2, results2) => {
           if (err2 || results2.length === 0 || !results2[0].photo) {
             //send detailed error
@@ -261,7 +260,6 @@ app.get('/api/item-photo', (req, res) => {
           res.set('Cache-Control', 'no-store');
           res.send(results2[0].photo);
         });
-      }, 100);
       return;
     }
     res.set('Content-Type', 'image/jpeg');
