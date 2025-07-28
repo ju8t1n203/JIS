@@ -127,76 +127,81 @@ window.edit = function edit() {
             const [site, room, area, specifier] = (item.location || '').split('>');
             console.log(`location information: ${site}->${room}->${area}->${specifier}`);
 
-            eisite.remove('--- Site ---')
-
-            getSites().then(sites => {
-                const matchedSite = sites.find(s => s.site_name === site);
-                if (matchedSite) {
-                    eisite.value = String(matchedSite.site_id);
-                } else {
-                    console.warn(`Site name "${site}" not found`);
-                }
+            
+            fetch('/api/sites')
+            .then(res => res.json())
+            .then(sites => {
+                populateSelect(eisite, sites, 'site_name', 'site_name', '--- Choose Site ---');
+                //if site exists in eisite then eisite.value = site
+                eisite.value = site || '';
+                eisite.dispatchEvent(new Event('change'));
+                [...eisite.options].find(o => o.text === '--- Choose Site ---')?.remove();
             });
 
-            eiroom.remove('--- Room ---')
+            //buffer, wait 50ms before fetching rooms
+            setTimeout(() => {  
+                fetch(`/api/rooms?site_name=${encodeURIComponent(eisite.value)}`)
+                .then(res => res.json())
+                .then(rooms => {
+                    populateSelect(eiroom, rooms, 'room_name', 'room_name', '--- Choose Room ---');
+                    //if room exists in eiroom then eiroom.value = room
+                    eiroom.value = room || '';
+                    eiroom.dispatchEvent(new Event('change'));
+                    [...eiroom.options].find(o => o.text === '--- Choose Room ---')?.remove();
+                });
+            }, 50);
 
-            getChild(`site`, site, 'room', eiroom).then(locations => {
-                const matchedRoom = locations.find(s => s.room_name === room);
-                if (matchedRoom) {
-                    eiroom.value = String(matchedRoom.room_id);
-                } else {
-                    console.warn(`Room name "${room}" not found`);
-                }
+            setTimeout(() => {  
+                fetch(`/api/areas?room_name=${encodeURIComponent(eiroom.value)}`)
+                .then(res => res.json())
+                .then(areas => {
+                    populateSelect(eiarea, areas, 'area_name', 'area_name', '--- Choose Area ---');
+                    //if area exists in eiarea then eiarea.value = area
+                    eiarea.value = area || '';
+                    eiarea.dispatchEvent(new Event('change'));
+                    [...eiarea.options].find(o => o.text === '--- Choose Area ---')?.remove();
+                });
+            }, 100);
+
+            setTimeout(() => {  
+                fetch(`/api/specifiers?area_name=${encodeURIComponent(eiarea.value)}`)
+                .then(res => res.json())
+                .then(specifiers => {
+                    populateSelect(eispecifier, specifiers, 'specifier_name', 'specifier_name', '--- Choose Specifier ---');
+                    //if area exists in eiarea then eiarea.value = area
+                    eispecifier.value = specifier || '';
+                    eispecifier.dispatchEvent(new Event('change'));
+                    [...eispecifier.options].find(o => o.text === '--- Choose Specifier ---')?.remove();
+                });
+            }, 150);
+
+            fetch('/api/category')
+            .then(res => res.json())
+            .then(categories => {
+                const eicategory = document.getElementById('eicategory');
+                populateSelect(eicategory, categories, 'category_name', 'category_name', '--- Choose Category ---');
+                eicategory.value = item.category || '';
+                [...eicategory.options].find(o => o.text === '--- Choose Category ---')?.remove();
             });
 
-
+            eirestock.value = item.restock_amount || '';
         });
     }).catch(err => {
         console.error('Error fetching item:', err);
     });
-    
-    async function getSites() {
-      try {
-        const response = await fetch('/api/sites');
-        const sites = await response.json();
-        console.log(sites);
-    
-        sites.forEach(site => {
-          const option = document.createElement('option');
-          option.value = site.site_id;
-          option.textContent = site.site_name;
-          eisite.appendChild(option);
-        });
-    
-        return sites;
 
-      } catch (err) {
-        console.error('Error fetching sites:', err);
-      }
-    }
-
-        
-    async function getChild(parentType, parentName, childType, destination) {
-      try {
-        const response = await fetch(`/api/${childType}s?${parentType}_name=${parentName}`);
-        const locations = await response.json();
-        console.log(locations);
-    
-        const idKey = `.${childType}_id`;
-        const nameKey = `.${childType}_name`;
-
-        locations.forEach(location => {
+    function populateSelect(select, items, valueKey, textKey, placeholder) {
+    select.innerHTML = '';
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = placeholder;
+    select.appendChild(opt);
+    items.forEach(item => {
         const option = document.createElement('option');
-        option.value = location[idKey];
-        option.textContent = location[nameKey];
-        destination.appendChild(option);
-        });
-
-        return locations;
-
-      } catch (err) {
-        console.error('Error fetching location:', err);
-      }
+        option.value = item[valueKey];
+        option.textContent = item[textKey];
+        select.appendChild(option);
+    });
     }
 
 }

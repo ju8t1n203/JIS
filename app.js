@@ -8,6 +8,7 @@ app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 //TODO
 // finish all basic functionality
 // make embedded items
+// multiple item locations
 // users (admin, user)
 // user permissions
 // modularization
@@ -17,6 +18,7 @@ app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 //////fine tune button functionality
 //CONSUME
 //RESTOCK
+//////update item_quantity in item table
 //////POSSIBLY COMBINE WITH CONSUME DUE TO SIMILAR FUNCTIONALITY *after-thought, probably not if user permissions are implemented
 //ADD/REMOVE
 //////FINE TUNE
@@ -189,16 +191,6 @@ app.get('/api/areas', (req, res) => {
   });
 });
 
-//get site_id by site_name
-//retreives the parent site_id for a room, area, or specifier
-app.get('/api/site-id', (req, res) => {
-  const { site_name } = req.query;
-  pool.query('SELECT site_id FROM site WHERE site_name = ?', [site_name], (err, results) => {
-    if (err || results.length === 0) return res.json({ id: null });
-    res.json({ id: results[0].site_id });
-  });
-});
-
 //retreives the specifiers for an area by area_name
 app.get('/api/specifiers', (req, res) => {
   const { area_name } = req.query;
@@ -209,6 +201,16 @@ app.get('/api/specifiers', (req, res) => {
       res.json(results);
     }
   );
+});
+
+//get site_id by site_name
+//retreives the parent site_id for a room, area, or specifier
+app.get('/api/site-id', (req, res) => {
+  const { site_name } = req.query;
+  pool.query('SELECT site_id FROM site WHERE site_name = ?', [site_name], (err, results) => {
+    if (err || results.length === 0) return res.json({ id: null });
+    res.json({ id: results[0].site_id });
+  });
 });
 
 //get room_id by room_name

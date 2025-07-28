@@ -51,6 +51,11 @@ window.changeInventory = function () {
     const quantity = quantityInput?.value.trim() || '';
     const message = `${button} | ${barcode} | ${quantity}`;
 
+    if (!quantity){
+      alert('Please enter a quantity.');
+      return;
+    }
+
     fetch(`/api/item-exists?barcode=${barcode}&name=`)
     .then(res => res.json())
     .then(data => {
@@ -67,7 +72,6 @@ window.changeInventory = function () {
 
 
     //log action
-    
     getItem(barcode).then(item => {
       const action = button === 'Consume' ? 0 : 1; // 0 for consume, 1 for restock
       
