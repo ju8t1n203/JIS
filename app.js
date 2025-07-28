@@ -6,12 +6,15 @@ app.use(express.json({limit: '20mb'})); //limit for image size in MySQL is 16MB
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 
 //TODO
-// make it run on the server not just locally
-// have fun trying to do that lol
+// finish all basic functionality
+// make embedded items
+// users (admin, user)
+//user permissions
+// modularization
 
 //--- PAGES ---
 //SEARCH
-//////Make buttons work
+//////fine tune button functionality
 //CONSUME
 //RESTOCK
 //////POSSIBLY COMBINE WITH CONSUME DUE TO SIMILAR FUNCTIONALITY

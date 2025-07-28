@@ -88,6 +88,7 @@
     <script src="/js/searchdb.js"></script>
     <script src="/js/searchbtn.js"></script>
     <script src="/js/searchcombo.js"></script>
+    <script src="/js/changeinventory.js"></script>
 
     <script>
       //main tab logic
@@ -130,6 +131,14 @@
               if (typeof searchdb === 'function') searchdb();
               if (typeof setupInventoryBtnListeners === 'function') setupInventoryBtnListeners();
               console.log('[loadTab] Search DB initialized');
+            }
+            if (tabPath === 'consume.html') {
+              if (typeof changeInventory === 'function') changeInventory();
+              console.log('[loadTab] Consume page initialized');
+            }
+            if (tabPath === 'restock.html') {
+              if (typeof changeInventory === 'function') changeInventory();
+              console.log('[loadTab] Restock page initialized');
             }
             if (tabPath === 'edit.html') {
               if (typeof setupComboLogic === 'function') setupComboLogic();

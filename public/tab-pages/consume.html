@@ -9,7 +9,7 @@
         margin-bottom: 15px;
       }
 
-      .consume-btn {
+      .change-btn {
         padding: 8px 16px;
         font-family: Calibri, sans-serif;
         color: #FFFFFF;
@@ -18,7 +18,7 @@
         min-width: 150px;
       }
 
-      .consume-text {
+      .change-text {
         width: 250px;
         height: 20px;
         border-radius: 15px 15px 15px 15px;
@@ -57,35 +57,17 @@
       <!-- Search Stuff-->
       <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-family: Calibri, sans-serif; margin-bottom: 15px;">
 
-        <input class="consume-text" id="cbarcode" placeholder="Barcode">
+        <input class="change-text" id="cbarcode" placeholder="Barcode">
 
-        <input class="consume-text" id="cquantity" placeholder="Quantity">
+        <input class="change-text" id="cquantity" placeholder="Quantity">
 
-        <button class="consume-btn">Consume</button>
+        <button class="change-btn" type="button">Consume</button>
 
       </div>
 
       <!-- Search Box -->
-      <ul id="vb-style-listbox">
-        <li>SQL Data Here</li>
-        <li>SQL Data Here</li>
-        <li>SQL Data Here</li>
-      </ul>
+      <ul id="vb-style-listbox"></ul>
 
     </form>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const listbox = document.getElementById("vb-style-listbox");
-
-        listbox.addEventListener("click", function (e) {
-          if (e.target.tagName === "LI") {
-            Array.from(listbox.children).forEach(item => item.style.backgroundColor = "");
-            e.target.style.backgroundColor = "#b3d4fc";
-          }
-        });
-      });
-    </script>
-
   </body>
 </html>
