@@ -28,7 +28,7 @@ function setupInventoryBtnListeners() {
             const removeRadio = document.querySelector('input[type="radio"][name="changeType"][value="remove"]');
             if (removeRadio) removeRadio.checked = true;
             if (typeof window.updateFields === "function") window.updateFields();
-          }, 30);
+          }, 150);
           break;
         }
         case 'edit': {
@@ -62,7 +62,7 @@ function setupInventoryBtnListeners() {
                 setTimeout(() => {
                   const barcodeField = document.querySelector(barcodeFieldSelector);
                   if (barcodeField) barcodeField.value = barcode;
-                }, 30);
+                }, 150);
               }
             }, 30);
           } else {
@@ -72,7 +72,7 @@ function setupInventoryBtnListeners() {
                 const barcodeField = document.querySelector(barcodeFieldSelector);
                 if (barcodeField) barcodeField.value = barcode;
               }
-            }, 30);
+            }, 150);
           }
         }
       }
