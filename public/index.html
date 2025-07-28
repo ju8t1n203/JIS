@@ -128,6 +128,7 @@
           setTimeout(() => {
             if (tabPath === 'search.html') {
               if (typeof searchdb === 'function') searchdb();
+              if (typeof setupInventoryBtnListeners === 'function') setupInventoryBtnListeners();
               console.log('[loadTab] Search DB initialized');
             }
             if (tabPath === 'edit.html') {

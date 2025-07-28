@@ -109,6 +109,7 @@ window.adData = function adData() {
 
 //runs on tab load to set fields and properties
 window.setupADdata = function setupADdata() {
+    window.updateFields = updateFields;
     const submit = document.getElementById('adsubmit');
     if (submit) {
         submit.addEventListener('click', function(e) {

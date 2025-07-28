@@ -111,7 +111,7 @@ window.applyFilterAction = function applyFilterAction(filter) {
   }
 };
 
-// Helper for location filter string
+//helper for location filter string
 window.getLocationFilterString = function getLocationFilterString() {
   const F1 = document.getElementById("F1");
   const F2 = document.getElementById("F2");
@@ -121,7 +121,7 @@ window.getLocationFilterString = function getLocationFilterString() {
   return values.join(">");
 };
 
-// Always trigger a new search when F1-F4 change
+//trigger a new search when F1-F4 change
 ["F1", "F2", "F3", "F4"].forEach(id => {
   const sel = document.getElementById(id);
   if (sel) {
