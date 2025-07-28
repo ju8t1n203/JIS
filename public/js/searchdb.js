@@ -71,7 +71,7 @@ function searchdb() {
     }, 200);
   });
 
-  // Filter radio change triggers filter action and search
+  //filter radio change triggers filter action and search
   const filterRadios = document.getElementsByName("filterType");
   filterRadios.forEach(radio => {
     radio.addEventListener("change", function () {
@@ -82,7 +82,7 @@ function searchdb() {
     });
   });
 
-  // Show header on initial load
+  //make header for initial load
   listbox.innerHTML = `
     <li class="vb-list-header">
       Barcode | Name | Quantity | Location | Description
@@ -96,17 +96,33 @@ function searchdb() {
   setupSearchTriggers();
 }
 
+function setupListboxHighlighting() {
+  const listbox = document.getElementById("vb-style-listbox");
+  if (!listbox) return;
+  listbox.addEventListener("click", function (e) {
+    if (e.target.tagName === "LI") {
+      //if selected item is the header do nothing
+      if (e.target.classList.contains("vb-list-header")) return;
+      Array.from(listbox.children).forEach(item => item.classList.remove("selected"));
+      e.target.classList.add("selected");
+      //enable action buttons ie consume, restock, etc.
+      const actionButtons = document.querySelectorAll(".inventory-btn");
+      actionButtons.forEach(button => button.disabled = false);
+    }
+  });
+}
+
 function setupSearchTriggers() {
   const searchBox = document.getElementById("search");
 
-  // All radios (searchType and filterType)
+  //if a search-type or filter-type radio is changed, trigger a search
   document.querySelectorAll('input[type="radio"]').forEach(radio => {
     radio.addEventListener("change", function () {
       if (searchBox) searchBox.dispatchEvent(new Event("input"));
     });
   });
 
-  // All selects (F1-F4 and any others)
+  //if a filter select is changed, trigger a search
   document.querySelectorAll('select').forEach(sel => {
     sel.addEventListener("change", function () {
       if (searchBox) searchBox.dispatchEvent(new Event("input"));
