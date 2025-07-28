@@ -149,7 +149,7 @@ window.edit = function edit() {
                     eiroom.dispatchEvent(new Event('change'));
                     [...eiroom.options].find(o => o.text === '--- Choose Room ---')?.remove();
                 });
-            }, 50);
+            }, 100);
 
             setTimeout(() => {  
                 fetch(`/api/areas?room_name=${encodeURIComponent(eiroom.value)}`)
@@ -161,7 +161,7 @@ window.edit = function edit() {
                     eiarea.dispatchEvent(new Event('change'));
                     [...eiarea.options].find(o => o.text === '--- Choose Area ---')?.remove();
                 });
-            }, 100);
+            }, 200);
 
             setTimeout(() => {  
                 fetch(`/api/specifiers?area_name=${encodeURIComponent(eiarea.value)}`)
@@ -173,16 +173,18 @@ window.edit = function edit() {
                     eispecifier.dispatchEvent(new Event('change'));
                     [...eispecifier.options].find(o => o.text === '--- Choose Specifier ---')?.remove();
                 });
-            }, 150);
+            }, 300);
 
-            fetch('/api/category')
-            .then(res => res.json())
-            .then(categories => {
-                const eicategory = document.getElementById('eicategory');
-                populateSelect(eicategory, categories, 'category_name', 'category_name', '--- Choose Category ---');
-                eicategory.value = item.category || '';
-                [...eicategory.options].find(o => o.text === '--- Choose Category ---')?.remove();
-            });
+            setTimeout(() => {  
+                fetch('/api/category')
+                .then(res => res.json())
+                .then(categories => {
+                    const eicategory = document.getElementById('eicategory');
+                    populateSelect(eicategory, categories, 'category_name', 'category_name', '--- Choose Category ---');
+                    eicategory.value = item.category || '';
+                    [...eicategory.options].find(o => o.text === '--- Choose Category ---')?.remove();
+                });
+            }, 400);
 
             eirestock.value = item.restock_amount || '';
         });
