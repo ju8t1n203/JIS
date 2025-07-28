@@ -248,6 +248,7 @@ app.get('/api/item-photo', (req, res) => {
   pool.query('SELECT photo FROM item WHERE item_barcode = ?', [barcode], (err, results) => {
     if (err || results.length === 0 || !results[0].photo) {
       //photo not found try default
+      console.log('attempting default');
       pool.query('SELECT photo FROM item WHERE item_barcode = 12345', (err2, results2) => {
         if (err2 || results2.length === 0 || !results2[0].photo) {
           //send detailed error
