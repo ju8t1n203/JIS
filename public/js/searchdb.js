@@ -63,6 +63,13 @@ function populateSelect(select, items, valueKey, textKey, placeholder) {
     option.textContent = item[textKey];
     select.appendChild(option);
   });
+  //re-attach change listener after populating in order to re-search when filter selection changes
+  select.addEventListener("change", function () {
+    const searchBox = document.getElementById("search");
+    if (searchBox) {
+      searchBox.dispatchEvent(new Event("input"));
+    }
+  });
 }
 
 function applyFilterAction(filter) {
