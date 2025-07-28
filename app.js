@@ -2,10 +2,11 @@ const express = require('express');
 const app = express();
 
 app.use(express.static('public'));
-app.use(express.json({limit: '20mb'})); //limit for image size in MySQL is 16MB
+app.use(express.json({limit: '15mb'})); //limit for image size in MySQL is 16MB
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 
 //TODO
+// test photo upload types, what can/cannot be retrieved from the db after upload
 // finish all basic functionality
 // make embedded items
 // multiple item locations
@@ -247,7 +248,7 @@ app.get('/api/item-photo', (req, res) => {
   pool.query('SELECT photo FROM item WHERE item_barcode = ?', [barcode], (err, results) => {
     if (err || results.length === 0 || !results[0].photo) {
       //photo not found try default
-      pool.query('SELECT photo FROM item WHERE item_barcode = ?', ['12345'], (err2, results2) => {
+      pool.query('SELECT photo FROM item WHERE item_barcode = ?', [12345], (err2, results2) => {
         if (err2 || results2.length === 0 || !results2[0].photo) {
           //send detailed error
           return res.status(404).json({
