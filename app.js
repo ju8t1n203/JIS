@@ -9,7 +9,7 @@ app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 // finish all basic functionality
 // make embedded items
 // users (admin, user)
-//user permissions
+// user permissions
 // modularization
 
 //--- PAGES ---
@@ -17,8 +17,7 @@ app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 //////fine tune button functionality
 //CONSUME
 //RESTOCK
-//////POSSIBLY COMBINE WITH CONSUME DUE TO SIMILAR FUNCTIONALITY
-//////NEED TO START
+//////POSSIBLY COMBINE WITH CONSUME DUE TO SIMILAR FUNCTIONALITY *after-thought, probably not if user permissions are implemented
 //ADD/REMOVE
 //////FINE TUNE
 //EDIT
@@ -428,4 +427,17 @@ app.get("/search", (req, res) => {
     }
     res.json(results);
   });
+});
+
+//action log
+app.post('/api/action-log', (req, res) => {
+  const {barcode, action, oldQuantity, changeQuantity, newQuantity} = req.body;
+  pool.query(
+    'INSERT INTO log (item_barcode, action, old_qty, change_qty, new_qty) VALUES (?, ?, ?, ?, ?)',
+    [barcode, action, oldQuantity, changeQuantity, newQuantity],
+    (err, result) => {
+      if (err) return res.status(500).json({ success: false, error: err.message });
+      res.json({ success: true });
+    }
+  );
 });
