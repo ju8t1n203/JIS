@@ -64,7 +64,7 @@ function setupInventoryBtnListeners() {
                   if (barcodeField) barcodeField.value = barcode;
                 }, 150);
               }
-            }, 30);
+            }, 150);
           } else {
             //for other tabs, set barcode after switching
             setTimeout(() => {
