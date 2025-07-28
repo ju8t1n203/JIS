@@ -11,7 +11,7 @@ app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 
 //--- PAGES ---
 //SEARCH
-//////NEED TO START
+//////Make buttons work
 //CONSUME
 //RESTOCK
 //////POSSIBLY COMBINE WITH CONSUME DUE TO SIMILAR FUNCTIONALITY

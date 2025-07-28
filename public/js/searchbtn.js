@@ -1,0 +1,1 @@
+//attach click listener to all buttons

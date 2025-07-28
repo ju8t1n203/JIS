@@ -16,6 +16,12 @@
         background-color: #005178;
         border-radius: 15px 15px 15px 15px;
         min-width: 150px;
+        cursor: pointer;
+      }
+
+      .inventory-btn:disabled{
+        color: #000000;
+        cursor: not-allowed;
       }
 
       .scombo{
@@ -113,11 +119,11 @@
 
       <!-- Buttons go in their own block below -->
       <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-        <button class="inventory-btn" type="button">Consume</button>
-        <button class="inventory-btn" type="button">Restock</button>
-        <button class="inventory-btn" type="button">Remove</button>
-        <button class="inventory-btn" type="button">Edit</button>
-        <button class="inventory-btn" type="button">Pick It</button>
+        <button class="inventory-btn" type="button" disabled>Consume</button>
+        <button class="inventory-btn" type="button" disabled>Restock</button>
+        <button class="inventory-btn" type="button" disabled>Remove</button>
+        <button class="inventory-btn" type="button" disabled>Edit</button>
+        <button class="inventory-btn" type="button" disabled>Pick It</button>
       </div>
     </form>
   </body>
