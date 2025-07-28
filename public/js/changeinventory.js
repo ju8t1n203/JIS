@@ -71,8 +71,8 @@ window.changeInventory = function () {
     getItem(barcode).then(item => {
       const action = button === 'Consume' ? 0 : 1; // 0 for consume, 1 for restock
       
-      const oldQTY = item.quantity;
-      const changeQTY = quantity;
+      const oldQTY = Number(item.quantity);
+      const changeQTY = Number(quantity);
       const newQTY = action === 0 ? oldQTY - changeQTY : oldQTY + changeQTY;
 
       const payload = {
