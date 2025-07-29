@@ -102,6 +102,7 @@ window.edit = function edit() {
     const eispecifier = document.getElementById('eispecifier');
     const eiadlocation = document.getElementById('eiadloc');
     const eiapply = document.getElementById('eichange');
+    const img = document.getElementById('eimagePreview');
     
     const fields = [
         einame, eiquantity, eidescription,eiupload, eicategory, eirestock,
@@ -123,13 +124,9 @@ window.edit = function edit() {
             eiquantity.value = item.quantity;
             eidescription.value = item.descriptio;
             setTimeout(() => {             
-                updateImagePreview(eibarcode.value)
-                  .then(msg => {
-                        console.log('✔️ Success:', msg);
-                    })
-                    .catch(err => {
-                        console.error('❌ Error:', err);
-                    });
+                updateImagePreview(eibarcode.value);
+                  if (img.src === '')
+                    img.src = '/api/item-photo?barcode=12345'; //default image if none found
             }, 100);
             
             const [site, room, area, specifier] = (item.location || '').split('>');
