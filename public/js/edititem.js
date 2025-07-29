@@ -31,8 +31,8 @@ function updateImagePreview(barcode) {
                     alert((data.error || 'No image found.') + details);
                 })
                 .catch(() => {
-                    alert('No image found for this item or default.');
                     img.src = `/api/item-photo?barcode=12345`; //default image
+                    alert('No image found for this item, using default.');
                 });
         };
         img.onload = function() {
