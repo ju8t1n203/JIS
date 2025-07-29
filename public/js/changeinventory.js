@@ -96,6 +96,20 @@ window.changeInventory = function () {
       .then(data => {
         if (data.success) {
           console.log('✅ Action logged:', payload);
+          //becuase action has cleared quantity needs to be updated in the item table
+          const updatePayload = {
+            barcode,  
+            quantity: newQTY
+          };
+          console.log('Updating quantity in item table:', updatePayload);
+          fetch('/api/update-quantity', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify( updatePayload )
+          })
+          .then(res => res.json())
+          .then(data => console.log('✅ Update response:', data))
+          .catch(err => console.error('❌ Update failed:', err));
         } else {
           console.warn('⚠️ Failed to log action:', data.error);
         }

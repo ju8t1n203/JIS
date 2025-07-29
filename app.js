@@ -6,7 +6,8 @@ app.use(express.json({limit: '15mb'})); //limit for image size in MySQL is 16MB
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 
 //TODO
-// test photo upload types, what can/cannot be retrieved from the db after upload
+// test photo upload types, what can/cannot be retrieved from the db after upload4
+// fix windows photo upload
 // finish all basic functionality
 // make embedded items
 // multiple item locations
@@ -438,6 +439,27 @@ app.post('/api/action-log', (req, res) => {
     (err, result) => {
       if (err) return res.status(500).json({ success: false, error: err.message });
       res.json({ success: true });
+    }
+  );
+});
+
+//updates item quantity for consuming/restocking
+app.post('/api/update-quantity', (req, res) => {
+  const { quantity, barcode } = req.body;
+  pool.query(
+    'UPDATE item SET quantity = ? WHERE item_barcode = ?',
+    [quantity, barcode],
+    (err, result) => {
+      if (err) {
+        console.error('Error updating quantity:', err);
+        return res.status(500).json({ success: false, error: err.message });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ success: false, error: 'Item not found.' });
+      }
+
+      res.json({ success: true, updated: { barcode, quantity } });
     }
   );
 });
