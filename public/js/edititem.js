@@ -123,7 +123,13 @@ window.edit = function edit() {
             eiquantity.value = item.quantity;
             eidescription.value = item.descriptio;
             setTimeout(() => {             
-                updateImagePreview(eibarcode.value);
+                updateImagePreview(eibarcode.value)
+                  .then(msg => {
+                        console.log('✔️ Success:', msg);
+                    })
+                    .catch(err => {
+                        console.error('❌ Error:', err);
+                    });
             }, 100);
             
             const [site, room, area, specifier] = (item.location || '').split('>');
