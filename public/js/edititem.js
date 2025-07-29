@@ -50,11 +50,11 @@ function setupPhotoButton() {
     //create a hidden file input
     let fileInput = document.getElementById('eifileinput');
     if (!fileInput) {
-        fileInput = document.createElement('einput');
+        fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
-        fileInput.id = 'adfileinput';
+        fileInput.id = 'eifileinput';
         document.body.appendChild(fileInput);
     }
 
@@ -109,7 +109,6 @@ window.edit = function edit() {
         einame, eiquantity, eidescription,eiupload, eicategory, eirestock,
         eisite, eiroom, eiarea, eispecifier, eiadlocation, eiapply
     ];
-    
     
     rSearch(eibarcode.value).then(found => {
         if (!found) {

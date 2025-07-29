@@ -20,11 +20,12 @@ app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 //////fine tune button functionality
 //CONSUME
 //RESTOCK
-//////update item_quantity in item table
+//////fine tune listbox display
 //ADD/REMOVE
-//////FINE TUNE
+//////add labels for textboxes
 //EDIT
-//////FINE TUNE
+//////ITEM
+//////add labels for textboxes
 //PICK LIST
 //////NEED TO START
 
