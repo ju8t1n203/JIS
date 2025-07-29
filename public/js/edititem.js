@@ -32,6 +32,7 @@ function updateImagePreview(barcode) {
                 })
                 .catch(() => {
                     alert('No image found for this item or default.');
+                    img.src = `/api/item-photo?barcode=12345`; //default image
                 });
         };
         img.onload = function() {
@@ -125,8 +126,6 @@ window.edit = function edit() {
             eidescription.value = item.descriptio;
             setTimeout(() => {             
                 updateImagePreview(eibarcode.value);
-                  if (img.src === '')
-                    img.src = '/api/item-photo?barcode=12345'; //default image if none found
             }, 100);
             
             const [site, room, area, specifier] = (item.location || '').split('>');
