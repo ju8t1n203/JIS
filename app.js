@@ -23,7 +23,6 @@ app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 //ADD/REMOVE
 //////FINE TUNE
 //EDIT
-//////no empty string categories
 //////FINE TUNE
 //PICK LIST
 //////NEED TO START
@@ -246,7 +245,7 @@ app.get('/api/item-photo', (req, res) => {
   pool.query('SELECT photo FROM item WHERE item_barcode = ?', [barcode], (err, results) => {
     if (err || results.length === 0 || !results[0].photo) {
       //photo not found try default
-        pool.query('SELECT photo FROM item WHERE item_barcode = ?',[`12345`], (err2, results2) => {
+        pool.query('SELECT photo FROM item WHERE item_barcode = ?',['12345'], (err2, results2) => {
           if (err2 || results2.length === 0 || !results2[0].photo) {
             //send detailed error
             return res.status(404).json({
