@@ -32,6 +32,7 @@ function updateImagePreview(barcode) {
                 })
                 .catch(() => {
                     alert('No image found for this item or default.');
+                    fetch(`/api/item-photo?barcode=12345`)
                 });
         };
         img.onload = function() {

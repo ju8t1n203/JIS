@@ -11,7 +11,7 @@ app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 // make embedded items
 // multiple item locations
 // users (admin, user)
-// user permissions
+//// user permissions
 // modularization
 
 //--- PAGES ---
@@ -20,11 +20,9 @@ app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 //CONSUME
 //RESTOCK
 //////update item_quantity in item table
-//////POSSIBLY COMBINE WITH CONSUME DUE TO SIMILAR FUNCTIONALITY *after-thought, probably not if user permissions are implemented
 //ADD/REMOVE
 //////FINE TUNE
 //EDIT
-//////ITEM EDITING
 //////no empty string categories
 //////FINE TUNE
 //PICK LIST
