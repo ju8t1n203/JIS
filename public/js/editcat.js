@@ -43,7 +43,7 @@ window.manipulateCategory = function manipulateCategory () {
     if (submit) {
         submit.addEventListener('click', function(e) {
             e.preventDefault();
-            if (!name) {
+            if (!name || name.trim() === '') {
                 alert('Please enter a category name.');
                 return;
             }
