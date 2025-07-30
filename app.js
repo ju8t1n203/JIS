@@ -32,7 +32,7 @@ app.listen(3000, () => console.log(`Server running on http://${address}:3000`));
 //ADD/REMOVE
 //////add labels for textboxes
 //EDIT
-//////ITEM-data base wiring/api
+//////ITEM-database wiring/api
 //////add labels for textboxes
 //PICK LIST
 //////NEED TO START
@@ -485,4 +485,25 @@ app.post('/api/update-quantity', (req, res) => {
       res.json({ success: true, updated: { barcode, quantity } });
     }
   );
+});
+
+//searches the database for barcode and/or name matches for item editing
+// excludes the item with the provided auto_id so items can retain the same barcode or name
+app.get('/search-items', async (req, res) => {
+  const { name, barcode, auto_id } = req.query;
+
+  try {
+    let query = `SELECT * FROM item WHERE auto_id != ? AND (${name ? 'item_name LIKE ?' : ''} ${name && barcode ? ' OR ' : ''} ${barcode ? 'item_barcode LIKE ?' : ''})`;
+
+    // build parameter list dynamically
+    const params = [auto_id];
+    if (name) params.push(`%${name}%`);
+    if (barcode) params.push(`%${barcode}%`);
+
+    const [rows] = pool.execute(query, params);
+    res.json(rows);
+  } catch (err) {
+    console.error('Search error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
