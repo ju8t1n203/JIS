@@ -282,15 +282,15 @@ window.final = function final() {
 
         const location = [site, room, area, specifier].join('>');
 
-        console.log('Received item:', {barcode, name, quantity, amount, location, descriptio, category, photo});
-
+        
         fetch('/api/add-item', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ barcode, name, quantity, amount, location, descriptio, category, photo: base64 })
+            body: JSON.stringify({ barcode, name, quantity, amount, location, descriptio, category, photo: base64})
         })
         .then(res => res.json())
         .then(result => {
+            console.log('Received item:', {barcode, name, quantity, amount, location, descriptio, category, photo: base64});
             if (result.success) {
                 alert('Item added successfully!');
                 if (preview) preview.value = '';

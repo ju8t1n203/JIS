@@ -3,13 +3,21 @@ const app = express();
 
 app.use(express.static('public'));
 app.use(express.json({limit: '15mb'})); //limit for image size in MySQL is 16MB
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+
+const os = require('os');
+
+const interfaces = os.networkInterfaces();
+const address =
+  Object.values(interfaces)
+    .flat()
+    .find(info => info.family === 'IPv4' && !info.internal)?.address || 'localhost';
+
+app.listen(3000, () => console.log(`Server running on http://${address}:3000`));
 
 //TODO
-// test photo upload types, what can/cannot be retrieved from the db after upload4
-// fix windows photo upload
+// test photo upload types, what can/cannot be retrieved from the db after upload
 // finish all basic functionality
-// make embedded items
+// make support for embedded items
 // multiple item locations
 // users (admin, user)
 //// user permissions
@@ -24,7 +32,7 @@ app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 //ADD/REMOVE
 //////add labels for textboxes
 //EDIT
-//////ITEM
+//////ITEM-data base wiring/api
 //////add labels for textboxes
 //PICK LIST
 //////NEED TO START
@@ -302,17 +310,31 @@ app.get('/api/get-item', (req, res) => {
 
 //add item
 app.post('/api/add-item', (req, res) => {
-    const {barcode, name, quantity, amount, location, descriptio, category, photo} = req.body;
-    const restock_amount = amount;
-    const photoBuffer = photo ? Buffer.from(photo, 'base64') : null;
-    pool.query(
-        'INSERT INTO item (item_barcode, item_name, quantity, restock_amount, location, descriptio, category, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [barcode, name, quantity, restock_amount, location, descriptio, category, photoBuffer],
-        (err, result) => {
-            if (err) return res.status(500).json({ success: false, error: err.message });
-            res.json({ success: true });
-        }
-    );
+  console.log('▶ req.body:', req.body);
+  const {barcode, name, quantity, amount = 5, location, descriptio, category, photo = null, embedded = 0, embedded_barcodes = null} = req.body;
+
+  const query = `INSERT INTO item (item_barcode, item_name, quantity, restock_amount, location, descriptio, category, photo, embedded, embedded_barcodes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const photoBuffer = photo ? Buffer.from(photo, 'base64') : null;
+  const values = [barcode, name, quantity, amount, location, descriptio, category, photoBuffer, embedded, embedded_barcodes];
+
+  const placeholderCount = (query.match(/\?/g) || []).length; //no clue as to why but there was a count mis-match error being thrown on fetch until this "log" was added
+  console.log('🔢 columns list:', query
+    .split('VALUES')[0]
+    .match(/\(([^)]+)\)/)[1]
+    .split(',')
+    .map(c => c.trim())
+  );
+  console.log('🔢 placeholder count:', placeholderCount);
+  console.log('🔢 values count:', values.length);
+  console.log('🔢 values array:', values);
+
+  pool.query(query, values, (err, result) => {
+    if (err) {
+      console.error('❌ Database Insert Error:', err);
+      return res.status(500).json({ success: false, error: err.message });
+    }
+    res.json({ success: true, insertedId: result.insertId || null });
+  });
 });
 
 //remove item
