@@ -103,7 +103,7 @@ window.edit = function edit() {
     const eispecifier = document.getElementById('eispecifier');
     const eiadlocation = document.getElementById('eiadloc');
     const eiapply = document.getElementById('eichange');
-    const eiAutoID = 0 //will be updated on item fetch
+    let eiAutoID; //will be updated on item fetch
     
     const fields = [
         einame, eiquantity, eidescription,eiupload, eicategory, eirestock,
@@ -199,7 +199,7 @@ window.edit = function edit() {
             const esearch = {
                 name: einame.value,
                 barcode: eibarcode.value,
-                auto_id: item.auto_id
+                auto_id: eiAutoID
             };
 
             const itemData = {
