@@ -195,6 +195,8 @@ window.edit = function edit() {
             eirestock.value = item.restock_amount || '';
         });
 
+        /**/ //this will be for "adding" the item after dupe verification
+
         eiapply.addEventListener('click', function() {
             const esearch = {
                 name: einame.value,
@@ -202,24 +204,48 @@ window.edit = function edit() {
                 auto_id: eiAutoID
             };
 
-            const itemData = {
-                barcode: eibarcode.value,
-                item_name: einame.value,
-                quantity: eiquantity.value,
-                description: eidescription.value,
-                category: eicategory.value,
-                restock_amount: eirestock.value,
-                location: `${eisite.value}>${eiroom.value}>${eiarea.value}>${eispecifier.value}`
-            };
+            const qs = new URLSearchParams(esearch).toString();
+            console.log('Query string:', qs);
 
-            const queryString = new URLSearchParams(esearch).toString();
-            console.log('Checking for duplicates with query:', queryString);
-
-            fetch(`/api/eitem-search?${queryString}`)
+            fetch(`/api/eitem-search?${qs}`)
             .then(response => response.json())
             .then(data => {
-                console.log('Duplicate check result:', data.unique); // true or false
-                // You can now handle insert logic or show a warning
+                console.log('Unique?', data.unique); // true or false, true if no duplicates found, false when duplicates exist
+                if (data.unique === true) {
+                    const eiphoto = document.getElementById('eimagePreview');
+                    const dataURL = eiphoto.src;                            //full Data-URL
+                    const base64 = dataURL.split(',')[1] || '';             //just the base64
+
+                    const itemData = {
+                        auto_id: eiAutoID,
+                        item_barcode: eibarcode.value,
+                        item_name: einame.value,
+                        quantity: eiquantity.value,
+                        restock_amount: eirestock.value,
+                        location: `${eisite.value}>${eiroom.value}>${eiarea.value}>${eispecifier.value}`,
+                        descriptio: eidescription.value,
+                        category: eicategory.value,
+                        restock_amount: eirestock.value,
+                        photo: base64,
+                    };
+                    fetch('/api/item-update', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(itemData)
+                    })
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result.success) {
+                            alert('Item added successfully!');
+                        } else {
+                            alert('Failed to add item: ' + (result.error || 'Unknown error'));
+                        }
+                    });
+                    
+                }
+                else {
+                    alert('Item with this barcode or name already exists. Please choose a different one.');
+                }
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -243,4 +269,18 @@ window.edit = function edit() {
     });
     }
 
+    //makes the image blob from the selected image for saving in MySQL
+    function dataURLtoBlob(dataURL) {
+    const [header, base64] = dataURL.split(',');
+    const mimeMatch = header.match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+    const binary = atob(base64);
+    const array = new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+        array[i] = binary.charCodeAt(i);
+    }
+
+    return new Blob([array], { type: mime });
+    }
 }

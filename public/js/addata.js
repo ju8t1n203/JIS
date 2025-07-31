@@ -281,7 +281,6 @@ window.final = function final() {
         const base64 = dataURL.split(',')[1] || '';         //just the base64
 
         const location = [site, room, area, specifier].join('>');
-
         
         fetch('/api/add-item', {
             method: 'POST',

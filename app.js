@@ -489,21 +489,56 @@ app.post('/api/update-quantity', (req, res) => {
 
 //searches the database for barcode and/or name matches for item editing
 // excludes the item with the provided auto_id so items can retain the same barcode or name
-app.get('/api/eitem-search', async (req, res) => {
+app.get('/api/eitem-search', (req, res) => {
   const { name, barcode, auto_id } = req.query;
 
-  try {
-    let query = `SELECT 1 FROM item WHERE auto_id != ? AND (${name ? 'item_name LIKE ?' : ''} ${name && barcode ? ' OR ' : ''} ${barcode ? 'item_barcode LIKE ?' : ''}) LIMIT 1`;
+    const sql = `SELECT 1 FROM item WHERE auto_id != ? AND (${name ? 'item_name LIKE ?' : ''} ${name && barcode ? ' OR ' : ''} ${barcode ? 'item_barcode LIKE ?' : ''}) LIMIT 1`;
 
     // build parameter list dynamically
     const params = [auto_id];
     if (name) params.push(`%${name}%`);
     if (barcode) params.push(`%${barcode}%`);
 
-    const [rows] = pool.execute(query, params);
-    res.json(rows);
-  } catch (err) {
-    console.error('Search error:', err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+    pool.execute(sql, params, (err, rows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    res.json({ unique: rows.length === 0 });
+  });
+});
+
+app.post('/api/item-update', async (req, res) => {
+  const {auto_id, item_name, item_barcode, quantity, restock_amount, location, descriptio, category, photo, embedded, embedded_barcodes} = req.body;
+  const photoBuffer = photo ? Buffer.from(photo, 'base64') : null;
+
+  const query = `
+    UPDATE item
+       SET item_name    = ?,
+           item_barcode = ?,
+           quantity     = ?,
+           restock_amount        = ?,
+           location     = ?,
+           descriptio     = ?,
+           category     = ?,
+           photo        = ?,
+           embedded     = ?,
+           embedded_barcodes = ?
+     WHERE auto_id = ?
+  `;
+
+  const params = [item_name, item_barcode, quantity, restock_amount, location, descriptio, category, photoBuffer, embedded, embedded_barcodes, auto_id ];
+
+  pool.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Update error:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
+
+    res.json({ success: true, updatedRows: result.affectedRows });
+  });
 });
