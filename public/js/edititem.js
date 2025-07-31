@@ -207,9 +207,10 @@ window.edit = function edit() {
                 restock_amount: eirestock.value,
                 location: `${eisite.value}>${eiroom.value}>${eiarea.value}>${eispecifier.value}`
             };
-            
-            const queryString = new URLSearchParams(esearch).toString();
 
+            const queryString = new URLSearchParams(esearch).toString();
+            console.log('Checking for duplicates with query:', queryString);
+            
             fetch(`/api/eitem-search?${queryString}`)
             .then(response => response.json())
             .then(data => {
