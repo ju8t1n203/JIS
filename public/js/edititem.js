@@ -122,6 +122,8 @@ window.edit = function edit() {
             einame.value = item.item_name;
             eiquantity.value = item.quantity;
             eidescription.value = item.descriptio;
+            console.log(`Item ${item.auto_id}`);
+            
             setTimeout(() => {             
                 updateImagePreview(eibarcode.value);
             }, 100);
@@ -210,7 +212,7 @@ window.edit = function edit() {
 
             const queryString = new URLSearchParams(esearch).toString();
             console.log('Checking for duplicates with query:', queryString);
-            
+
             fetch(`/api/eitem-search?${queryString}`)
             .then(response => response.json())
             .then(data => {
