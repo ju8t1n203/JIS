@@ -103,6 +103,7 @@ window.edit = function edit() {
     const eispecifier = document.getElementById('eispecifier');
     const eiadlocation = document.getElementById('eiadloc');
     const eiapply = document.getElementById('eichange');
+    const eiAutoID = 0 //will be updated on item fetch
     
     const fields = [
         einame, eiquantity, eidescription,eiupload, eicategory, eirestock,
@@ -122,8 +123,9 @@ window.edit = function edit() {
             einame.value = item.item_name;
             eiquantity.value = item.quantity;
             eidescription.value = item.descriptio;
+            eiAutoID = item.auto_id;
             console.log(`Item ${item.auto_id}`);
-            
+
             setTimeout(() => {             
                 updateImagePreview(eibarcode.value);
             }, 100);
