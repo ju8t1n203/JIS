@@ -311,7 +311,7 @@ app.get('/api/get-item', (req, res) => {
 //add item
 app.post('/api/add-item', (req, res) => {
   console.log('▶ req.body:', req.body);
-  const {barcode, name, quantity, amount = 5, location, descriptio, category, photo = null, embedded = 0, embedded_barcodes = null} = req.body;
+  const {barcode, name, quantity, amount, location, descriptio, category, photo, embedded, embedded_barcodes} = req.body;
 
   const query = `INSERT INTO item (item_barcode, item_name, quantity, restock_amount, location, descriptio, category, photo, embedded, embedded_barcodes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const photoBuffer = photo ? Buffer.from(photo, 'base64') : null;
@@ -489,11 +489,11 @@ app.post('/api/update-quantity', (req, res) => {
 
 //searches the database for barcode and/or name matches for item editing
 // excludes the item with the provided auto_id so items can retain the same barcode or name
-app.get('/search-items', async (req, res) => {
+app.get('/api/eitem-search', async (req, res) => {
   const { name, barcode, auto_id } = req.query;
 
   try {
-    let query = `SELECT * FROM item WHERE auto_id != ? AND (${name ? 'item_name LIKE ?' : ''} ${name && barcode ? ' OR ' : ''} ${barcode ? 'item_barcode LIKE ?' : ''})`;
+    let query = `SELECT 1 FROM item WHERE auto_id != ? AND (${name ? 'item_name LIKE ?' : ''} ${name && barcode ? ' OR ' : ''} ${barcode ? 'item_barcode LIKE ?' : ''}) LIMIT 1`;
 
     // build parameter list dynamically
     const params = [auto_id];

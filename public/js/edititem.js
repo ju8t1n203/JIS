@@ -103,7 +103,6 @@ window.edit = function edit() {
     const eispecifier = document.getElementById('eispecifier');
     const eiadlocation = document.getElementById('eiadloc');
     const eiapply = document.getElementById('eichange');
-    const img = document.getElementById('eimagePreview');
     
     const fields = [
         einame, eiquantity, eidescription,eiupload, eicategory, eirestock,
@@ -190,6 +189,36 @@ window.edit = function edit() {
             }, 400);
 
             eirestock.value = item.restock_amount || '';
+        });
+
+        eiapply.addEventListener('click', function() {
+            const esearch = {
+                name: einame.value,
+                barcode: eibarcode.value,
+                auto_id: item.auto_id
+            };
+
+            const itemData = {
+                barcode: eibarcode.value,
+                item_name: einame.value,
+                quantity: eiquantity.value,
+                description: eidescription.value,
+                category: eicategory.value,
+                restock_amount: eirestock.value,
+                location: `${eisite.value}>${eiroom.value}>${eiarea.value}>${eispecifier.value}`
+            };
+            
+            const queryString = new URLSearchParams(esearch).toString();
+
+            fetch(`/api/eitem-search?${queryString}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Duplicate check result:', data.unique); // true or false
+                // You can now handle insert logic or show a warning
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
         });
     }).catch(err => {
         console.error('Error fetching item:', err);
