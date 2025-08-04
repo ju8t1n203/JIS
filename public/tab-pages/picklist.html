@@ -1,1 +1,93 @@
-<p>Pick me</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+
+      .form-row {
+        display: flex;
+        gap: 0px;
+        margin-bottom: 15px;
+      }
+
+      .inventory-btn {
+        padding: 8px 16px;
+        font-family: inherit;
+        color: #FFFFFF;
+        background-color: #005178;
+        border-radius: 15px 15px 15px 15px;
+        min-width: 150px;
+        cursor: pointer;
+      }
+
+      .inventory-btn:disabled{
+        color: #000000;
+        cursor: not-allowed;
+      }
+
+      .scombo{
+          font-family: inherit;
+          width: 200px;
+          height: 30px;
+          border-radius: 15px 15px 15px 15px;
+          padding: 5px;
+          text-align: center;
+      }
+
+        .data-view {
+            display: grid;
+            grid-template-columns: 50px 250px 250px 500px 150px 150px 150px;
+            gap: 4px; /* Adjust spacing between columns if needed */
+            padding: 8px;
+            font-family: inherit;
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            border-radius: 15px 15px 15px 15px;
+        }
+
+        .data-view > div {
+            padding: 4px 6px;
+            border-bottom: 1px solid #ddd;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+
+      input[type="text"] {
+        width: 250px;
+        height: 20px;
+        border-radius: 15px 15px 15px 15px;
+        padding: 5px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <form>
+      <!-- Search Stuff-->
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-family: Calibri, sans-serif; margin-bottom: 15px;">
+
+        <input type="text" id="pBarcode" placeholder="Barcode">
+        <input type="text" id="pAmount" placeholder="Amount" style="width: 100px;">
+
+        <button class="inventory-btn" type="button" id="pSubmit">Submit</button>
+        <button class="inventory-btn" type="button" id="pUpload">Upload BOM</button>
+        <button class="inventory-btn" type="button" id="pPrint">Print</button>
+
+      </div>
+
+      <!-- Picklist -->
+      <div class="data-view">
+        <div>✅</div>
+        <div>Barcode</div>
+        <div>Name</div>
+        <div>Location</div>
+        <div>#To Pick</div>
+        <div>#Avalible</div>
+        <div>#To Order</div>
+      </div>
+
+    </form>
+  </body>
+</html>

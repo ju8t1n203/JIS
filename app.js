@@ -15,15 +15,15 @@ const address =
 app.listen(3000, () => console.log(`Server running on http://${address}:3000`));
 
 //TODO
-// test photo upload types, what can/cannot be retrieved from the db after upload
 // finish all basic functionality
 // make support for embedded items
+// test photo upload types, what can/cannot be retrieved from the db after upload
 // multiple item locations
 // users (admin, user)
 //// user permissions
 // modularization
 
-//--- PAGES ---
+//--- PAGES --- 
 //SEARCH
 //////fine tune button functionality
 //CONSUME
@@ -32,7 +32,6 @@ app.listen(3000, () => console.log(`Server running on http://${address}:3000`));
 //ADD/REMOVE
 //////add labels for textboxes
 //EDIT
-//////ITEM-database wiring/api
 //////add labels for textboxes
 //PICK LIST
 //////NEED TO START

@@ -89,6 +89,7 @@
     <script src="/js/searchbtn.js"></script>
     <script src="/js/searchcombo.js"></script>
     <script src="/js/changeinventory.js"></script>
+    <script src="/js/PickLogic.js"></script>
 
     <script>
       //main tab logic
@@ -140,6 +141,10 @@
               if (typeof changeInventory === 'function') changeInventory();
               console.log('[loadTab] Restock page initialized');
             }
+            if (tabPath === 'addremove.html') {
+              if (typeof setupADcombo === 'function') setupADcombo();
+              if (typeof setupADdata === 'function') setupADdata();
+            }
             if (tabPath === 'edit.html') {
               if (typeof setupComboLogic === 'function') setupComboLogic();
               if (typeof manipulateCategory === 'function') manipulateCategory();
@@ -148,9 +153,9 @@
               if (typeof setupei === 'function') setupei();
               console.log('[loadTab] Sub-tabs initialized');
             }
-            if (tabPath === 'addremove.html') {
-              if (typeof setupADcombo === 'function') setupADcombo();
-              if (typeof setupADdata === 'function') setupADdata();
+            if (tabPath === 'picklist.html') {
+              if (typeof load === 'function') load();
+              console.log('[loadTab] Picklist page initialized');
             }
           }, 20);
         })
