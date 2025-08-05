@@ -8,31 +8,30 @@
     <title>Justin Inventory System</title>
     <style>
       
-    body {
-      font-family: "Roboto", sans-serif;
-      font-size: 16pt;
-      font-weight: 300;
-      font-style: normal;
-      background-color: #999999;
-      position: relative; /* Required for ::before layering */
-      overflow: hidden;
-    }
+      body {
+        font-family: "Roboto", sans-serif;
+        font-size: 16pt;
+        font-weight: 300;
+        font-style: normal;
+        background-color: #999999;
+        position: relative; /* Required for ::before layering */
+        overflow: hidden;
+      }
 
-    body::before {
-      background-image: url('favicon.ico');
-      background-size: 256px 300px;
-      background-position: bottom 25px right 25px;
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-repeat: no-repeat;
-      z-index: -1; 
-      pointer-events: none;
-    }
-
+      body::before {
+        background-image: url('favicon.ico');
+        background-size: 256px 300px;
+        background-position: bottom 25px right 25px;
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-repeat: no-repeat;
+        z-index: -1; 
+        pointer-events: none;
+      }
 
       .tabs.main-tabs {
         display: flex;
@@ -104,9 +103,22 @@
         edit: 'edit.html',
         picklist: 'picklist.html'
       };
+      
+      let cachedPicklistHTML = null;
+      let reloadPicklist = false;
 
       mainTabs.forEach(tab => {
         tab.addEventListener('click', () => {
+          const currentActive = document.querySelector('.tabs.main-tabs .tab.active');
+          const currentTabPath = tabMap[currentActive?.dataset.tab];
+
+          //if leaving picklist tab save the picklist HTML
+          if (currentTabPath === 'picklist.html') {
+            cachedPicklistHTML = mainContent.innerHTML;
+            reloadPicklist = false;
+            console.log('[cache] Picklist snapshot saved before tab switch');
+          }
+          //change active tab
           mainTabs.forEach(t => t.classList.remove('active'));
           tab.classList.add('active');
 
@@ -115,56 +127,69 @@
         });
       });
 
-
+      //on initial load, default to search tab
       window.addEventListener('DOMContentLoaded', () => {
         loadTab('search.html');
       });
 
       function loadTab(tabPath) {
-        fetch(`tab-pages/${tabPath}`)
-        .then(res => res.text())
-        .then(html => {
-          mainContent.innerHTML = html;
 
-          //allow DOM to render
-          setTimeout(() => {
-            if (tabPath === 'search.html') {
-              if (typeof searchdb === 'function') searchdb();
-              if (typeof setupInventoryBtnListeners === 'function') setupInventoryBtnListeners();
-              console.log('[loadTab] Search DB initialized');
-            }
-            if (tabPath === 'consume.html') {
-              if (typeof changeInventory === 'function') changeInventory();
-              console.log('[loadTab] Consume page initialized');
-            }
-            if (tabPath === 'restock.html') {
-              if (typeof changeInventory === 'function') changeInventory();
-              console.log('[loadTab] Restock page initialized');
-            }
-            if (tabPath === 'addremove.html') {
-              if (typeof setupADcombo === 'function') setupADcombo();
-              if (typeof setupADdata === 'function') setupADdata();
-            }
-            if (tabPath === 'edit.html') {
-              if (typeof setupComboLogic === 'function') setupComboLogic();
-              if (typeof manipulateCategory === 'function') manipulateCategory();
-              if (typeof attachEditLocListener === 'function') attachEditLocListener();
-              if (typeof setupSubTabs === 'function') setupSubTabs();
-              if (typeof setupei === 'function') setupei();
-              console.log('[loadTab] Sub-tabs initialized');
-            }
-            if (tabPath === 'picklist.html') {
-              if (typeof load === 'function') load();
-              console.log('[loadTab] Picklist page initialized');
-            }
-          }, 20);
-        })
-        .catch(err => {
-          console.error(`❌ Failed to load ${tabPath}:`, err);
-          mainContent.innerHTML = `<p style="color:red;">Could not load content. Try again.</p>`;
+        //if picklist tab and cached picklist HTML exists, use it
+        if (tabPath === 'picklist.html' && cachedPicklistHTML && !reloadPicklist) {
+          mainContent.innerHTML = cachedPicklistHTML;
+          if (typeof load === 'function') load();
+          console.log('[loadTab] Picklist page reused from cache');
+          return;
+        }
+
+        //gets the html and  scripts for the selected tab
+        fetch(`tab-pages/${tabPath}`)
+          .then(res => res.text())
+          .then(html => {
+            mainContent.innerHTML = html;
+
+            setTimeout(() => {
+              switch (tabPath) {
+                case 'search.html':
+                  if (typeof searchdb === 'function') searchdb();
+                  if (typeof setupInventoryBtnListeners === 'function') setupInventoryBtnListeners();
+                  console.log('[loadTab] Search DB initialized');
+                break;
+
+                case 'consume.html':
+                case 'restock.html':
+                  if (typeof changeInventory === 'function') changeInventory();
+                  console.log(`[loadTab] ${tabPath.replace('.html','')} page initialized`);
+                break;
+
+                case 'addremove.html':
+                  if (typeof setupADcombo === 'function') setupADcombo();
+                  if (typeof setupADdata === 'function') setupADdata();
+                break;
+
+                case 'edit.html':
+                  if (typeof setupComboLogic === 'function') setupComboLogic();
+                  if (typeof manipulateCategory === 'function') manipulateCategory();
+                  if (typeof attachEditLocListener === 'function') attachEditLocListener();
+                  if (typeof setupSubTabs === 'function') setupSubTabs();
+                  if (typeof setupei === 'function') setupei();
+                  console.log('[loadTab] Sub-tabs initialized');
+                break;
+
+                case 'picklist.html':
+                  cachedPicklistHTML = mainContent.innerHTML;
+                  reloadPicklist = false;
+                  console.log('[loadTab] Picklist page rendered & cached');
+                  if (typeof load === 'function') load();
+                break;
+              }
+            }, 20);
+          })
+          .catch(err => {
+            console.error(`❌ Failed to load ${tabPath}:`, err);
+            mainContent.innerHTML = `<p style="color:red;">Could not load content. Try again.</p>`;
         });
       }
     </script>
-
   </body>
 </html>

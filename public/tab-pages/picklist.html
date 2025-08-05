@@ -33,61 +33,130 @@
           text-align: center;
       }
 
-        .data-view {
-            display: grid;
-            grid-template-columns: 50px 250px 250px 500px 150px 150px 150px;
-            gap: 4px; /* Adjust spacing between columns if needed */
-            padding: 8px;
-            font-family: inherit;
-            background-color: #f8f8f8;
-            border: 1px solid #ccc;
-            border-radius: 15px 15px 15px 15px;
-        }
-
-        .data-view > div {
-            padding: 4px 6px;
-            border-bottom: 1px solid #ddd;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
-
       input[type="text"] {
         width: 250px;
         height: 20px;
         border-radius: 15px 15px 15px 15px;
         padding: 5px;
       }
+        
+      .data-view {
+        display: grid;
+        grid-template-columns: 2.5% 20% 20% 40% 5% 5% 5%;
+        gap: 4px; /* Adjust spacing between columns if needed */
+        padding: 8px;
+        font-family: inherit;
+        background-color: #f8f8f8;
+        border: 1px solid #ccc;
+        border-radius: 15px 15px 15px 15px;
+        max-height: 500px;
+      }
+        
+      .data-view > div {
+        padding: 4px 6px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+        
+      .data-view > .angled {
+        position: relative;
+        overflow: visible;
+        padding: 0;
+      }
+        
+      .data-view > .angled > span {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%) rotate(-45deg);
+        transform-origin: bottom left;
+        white-space: normal;
+      }
+        
+      .data-view > div:nth-child(14n+8),
+      .data-view > div:nth-child(14n+9),
+      .data-view > div:nth-child(14n+10),
+      .data-view > div:nth-child(14n+11),
+      .data-view > div:nth-child(14n+12),
+      .data-view > div:nth-child(14n+13),
+      .data-view > div:nth-child(14n+14) {
+        background-color: rgb(200,200,200);
+      }
+        
+      .data-view-extender {
+        width: 100%;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
 
+      @media print { /* print style */
+        body * {
+          visibility: hidden; /* dont print buttons and textboxes */
+        }
+
+        .data-view, .data-view * {
+          visibility: visible;
+          font-size: 10pt;
+        }
+            
+        .data-view {
+          position: absolute;
+          top: 0;
+          left: 0;
+          grid-template-columns: 0.25in 1.25in 1.25in 3.25in 0.5in 0.5in 0.5in;
+          border: none;
+        }
+
+        .data-view > div:nth-child(14n+8),
+        .data-view > div:nth-child(14n+9),
+        .data-view > div:nth-child(14n+10),
+        .data-view > div:nth-child(14n+11),
+        .data-view > div:nth-child(14n+12),
+        .data-view > div:nth-child(14n+13),
+        .data-view > div:nth-child(14n+14) {
+          background-color: rgb(200,200,200);
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        @page {
+          font-family: "Roboto", sans-serif;
+          font-weight: 300;
+          font-size: 10pt;
+          @bottom-right {
+            content: "Page " counter(page) " of " counter(pages);
+          }
+        }
+      }
     </style>
   </head>
 
   <body>
     <form>
-      <!-- Search Stuff-->
-      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-family: Calibri, sans-serif; margin-bottom: 15px;">
 
+      <!-- Buttons n Stuff-->
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-family: Calibri, sans-serif; margin-bottom: 15px;">
         <input type="text" id="pBarcode" placeholder="Barcode">
-        <input type="text" id="pAmount" placeholder="Amount" style="width: 100px;">
+        <input type="text" id="pAmount" placeholder="#To Pick" style="width: 100px;">
 
         <button class="inventory-btn" type="button" id="pSubmit">Submit</button>
         <button class="inventory-btn" type="button" id="pUpload">Upload BOM</button>
         <button class="inventory-btn" type="button" id="pPrint">Print</button>
-
       </div>
 
       <!-- Picklist -->
-      <div class="data-view">
-        <div>✅</div>
-        <div>Barcode</div>
-        <div>Name</div>
-        <div>Location</div>
-        <div>#To Pick</div>
-        <div>#Avalible</div>
-        <div>#To Order</div>
+      <div class="data-view-extender">
+        <div class="data-view">
+          <div><span>✅</span></div>
+          <div><span>Barcode</span></div>
+          <div><span>Name</span></div>
+          <div><span>Location</span></div>
+          <div class="angled"><span>#To Pick</span></div>
+          <div class="angled"><span>#Available</span></div>
+          <div class="angled"><span>#To Order</span></div>
+        </div>
       </div>
-
     </form>
   </body>
 </html>
